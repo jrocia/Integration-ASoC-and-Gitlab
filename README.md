@@ -3,21 +3,21 @@ Yaml file and Dockerfile giving ideas in how to integrate ASoC and Gitlab
 
 SAST:<br>
 Based in 3 components:<br>
-1 - a Dockerfile to get ASOC command line client inside a container to be used by Gitlab image Pipeline<br>
-2 - YAML project file with a scan job to be used in any YAML project file <br>
-3 - Some variable that could be on YAML or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
+1 - a Dockerfile to generate a image container where download ASOC command line client and some tools to be used by Gitlab image Pipeline<br>
+2 - YAML project file with a scan job to be used in a YAML project file<br>
+3 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
-features:
+Features:
 - Downloadable artifact scan report
 - Parameterizable Security Gate
 
-Scan Job
+Scan Job image
 ![image](https://user-images.githubusercontent.com/69405400/144601178-9bc8c675-a2dd-44c4-a312-908800be1472.png)
 
-Artifact downloadable
+Artifact downloadable image
 ![image](https://user-images.githubusercontent.com/69405400/144601700-40bfa642-a776-4e4f-ba05-e96f4324ef19.png)
 
-Security Gate response failing or succeeding build
+Security Gate response failing or succeeding build images
 ![image](https://user-images.githubusercontent.com/69405400/144601954-ae41e5ea-a9fa-464b-b931-36cd0887723b.png)
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
 
