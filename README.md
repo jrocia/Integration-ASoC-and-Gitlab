@@ -22,6 +22,7 @@ Security Gate response failing or succeeding build
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
 
 
+docker build -t saclient dockerfile
 ````dockerfile
 FROM ubuntu:20.04
 ENV PATH="/SAClientUtil.8.0.1461/bin:${PATH}"
