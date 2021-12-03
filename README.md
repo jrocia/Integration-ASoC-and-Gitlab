@@ -8,18 +8,19 @@ Based in 3 components:
 3 - Some variable that could be on YAML or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)
 
 features:
-- Downalodable artifcat scan report
-- Parametrizable Security Gate
+- Downloadable artifact scan report
+- Parameterizable Security Gate
 
 Scan Job
 ![image](https://user-images.githubusercontent.com/69405400/144601178-9bc8c675-a2dd-44c4-a312-908800be1472.png)
 
-Artifact downloadble
+Artifact downloadable
 ![image](https://user-images.githubusercontent.com/69405400/144601700-40bfa642-a776-4e4f-ba05-e96f4324ef19.png)
 
-Security Gate response failing or succeding build
+Security Gate response failing or succeeding build
 ![image](https://user-images.githubusercontent.com/69405400/144601954-ae41e5ea-a9fa-464b-b931-36cd0887723b.png)
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
+
 
 ````dockerfile
 FROM ubuntu:20.04
