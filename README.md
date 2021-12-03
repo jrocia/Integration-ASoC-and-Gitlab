@@ -39,9 +39,9 @@ image: saclient
 variables:
   sevSecGw: totalIssues
   maxIssuesAllowed: 200
-  appId: 293bfba8-da3b-404f-97b4-1f782d00fd5d
-  apiKeyId: /HHOylPgQ+QWD4jvUgeN2Gp0jnCA0ttFOLCu+ySC81E=
-  apiKeySecret: a3083d2b-4098-705b-a7dd-b7e5c049c346
+  appId: xxxxxxxxxxxxxxxxxx
+  apiKeyId: xxxxxxxxxxxxxxxxxx
+  apiKeySecret: xxxxxxxxxxxxxxxxxx
 
 stages:
 - clean
