@@ -1,7 +1,7 @@
 # Integration AppScan on Cloud (ASoC) and Gitlab
 Yaml file and Dockerfile giving ideas in how to integrate ASoC and Gitlab
 
-SAST:
+SAST:/n
 Based in 3 components: 
 1 - a Dockerfile to get ASOC command line client inside a container to be used by Gitlab image Pipeline
 2 - YAML project file with a scan job to be used in any YAML project file 
