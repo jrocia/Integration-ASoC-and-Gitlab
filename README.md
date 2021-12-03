@@ -21,16 +21,16 @@ Security Gate response failing or succeding build
 ![image](https://user-images.githubusercontent.com/69405400/144601954-ae41e5ea-a9fa-464b-b931-36cd0887723b.png)
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
 
-'''dockerfile
+''''dockerfile
 FROM ubuntu:20.04
 ENV PATH="/SAClientUtil.8.0.1461/bin:${PATH}"
 RUN apt update
 RUN apt install -y curl unzip maven openjdk-11-jre gradle && apt clean
 RUN curl https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux > SAClientUtil.zip
 RUN unzip SAClientUtil.zip
-'''
+''''
 
-'''yaml
+''''yaml
 image: saclient
 
 # The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues
@@ -106,4 +106,4 @@ scan-job:
   artifacts:
     paths:
       - "*.html"
-'''
+''''
