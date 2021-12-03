@@ -11,13 +11,13 @@ Features:
 - Downloadable artifact scan report
 - Parameterizable Security Gate
 
-Scan Job image
+Scan Job
 ![image](https://user-images.githubusercontent.com/69405400/144601178-9bc8c675-a2dd-44c4-a312-908800be1472.png)
 
-Artifact downloadable image
+Artifact downloadable
 ![image](https://user-images.githubusercontent.com/69405400/144601700-40bfa642-a776-4e4f-ba05-e96f4324ef19.png)
 
-Security Gate response failing or succeeding build images
+Security Gate response failing or succeeding build
 ![image](https://user-images.githubusercontent.com/69405400/144601954-ae41e5ea-a9fa-464b-b931-36cd0887723b.png)
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
 
