@@ -116,10 +116,11 @@ Based in 2 components:<br>
 2 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
 ````yaml
-# The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues
-# maxIssuesAllowed is the amount of issues in selected sevSecGw
-# appId is application id located in ASoC
-# appscanPresenceId is AppScan Presence ID that will be used to reach out URL
+# The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues.
+# maxIssuesAllowed is the amount of issues in selected sevSecGw.
+# appId is application id located in ASoC.
+# appscanPresenceId is AppScan Presence ID that will be used to reach out URL.
+# About scan authenticated, just add the login recorded file "dast.config" in root of source code that it will be sent to ASOC. 
 variables:
   apiKeyId: xxxxxxxxxxxxxxxxxx
   apiKeySecret: xxxxxxxxxxxxxxxxxx
