@@ -110,7 +110,7 @@ scan-job:
       - "*.html"
 ````
 
-<b>DAST:</b><br>
+<b><h1>DAST:</b></h1><br>
 Based in 2 components:<br>
 1 - YAML project file with a scan job to be used in a YAML project file.<br>
 2 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
