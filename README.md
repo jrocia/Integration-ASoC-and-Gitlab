@@ -48,7 +48,7 @@ variables:
 stages:
 - clean
 - build
-- scan
+- scan-sast
 
 clean-job:
   stage: clean
@@ -61,7 +61,7 @@ build-job:
   - gradle build
 
 scan-job:
-  stage: scan
+  stage: scan-sast
   script:
   - gradle build
   - appscan.sh prepare
@@ -130,24 +130,11 @@ variables:
   maxIssuesAllowed: 200
 
 stages:
-- clean
-- build
-- scan
-
-clean-job:
-  stage: clean
-  script:
-  - gradle clean
-
-build-job:
-  stage: build
-  script:
-  - gradle build
+- scan-dast
 
 scan-job:
-  stage: scan
+  stage: scan-dast
   script:
-  - gradle build
   - >
     asocToken=$(curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
     dastFileId=$(curl -X 'POST' 'https://cloud.appscan.com/api/v2/FileUpload' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: multipart/form-data' -F 'fileToUpload=@dast.config;type=application/xml' | grep -oP '(?<="FileId":")[^"]*')
