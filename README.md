@@ -116,6 +116,10 @@ Based in 2 components:<br>
 2 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
 ````yaml
+# The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues
+# maxIssuesAllowed is the amount of issues in selected sevSecGw
+# appId is application id located in ASoC
+# appscanPresenceId is AppScan Presence ID that will be used to reach out URL
 variables:
   apiKeyId: xxxxxxxxxxxxxxxxxx
   apiKeySecret: xxxxxxxxxxxxxxxxxx
