@@ -144,7 +144,6 @@ scan-job:
   stage: scan
   script:
   - gradle build
-  - nohup /root/AppScanPresence/startPresence.sh &
   - >
     asocToken=$(curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
     dastFileId=$(curl -X 'POST' 'https://cloud.appscan.com/api/v2/FileUpload' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: multipart/form-data' -F 'fileToUpload=@dast.config;type=application/xml' | grep -oP '(?<="FileId":")[^"]*')
