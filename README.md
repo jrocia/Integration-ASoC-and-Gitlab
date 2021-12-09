@@ -39,11 +39,11 @@ image: saclient
 # maxIssuesAllowed is the amount of issues in selected sevSecGw
 # appId is application id located in ASoC 
 variables:
-  sevSecGw: totalIssues
-  maxIssuesAllowed: 200
-  appId: xxxxxxxxxxxxxxxxxx
   apiKeyId: xxxxxxxxxxxxxxxxxx
   apiKeySecret: xxxxxxxxxxxxxxxxxx
+  appId: xxxxxxxxxxxxxxxxxx
+  sevSecGw: totalIssues
+  maxIssuesAllowed: 200
 
 stages:
 - clean
@@ -105,6 +105,103 @@ scan-job:
     fi
   - echo "Security Gate passed"
   
+  artifacts:
+    paths:
+      - "*.html"
+````
+
+<b>DAST:</b><br>
+Based in 2 components:<br>
+1 - YAML project file with a scan job to be used in a YAML project file.<br>
+2 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
+
+````yaml
+variables:
+  apiKeyId: xxxxxxxxxxxxxxxxxx
+  apiKeySecret: xxxxxxxxxxxxxxxxxx
+  appId: xxxxxxxxxxxxxxxxxx
+  appscanPresenceId: xxxxxxxxxxxxxxxxxx
+  urlTarget: http://demo.testfire.net/
+  sevSecGw: totalIssues
+  maxIssuesAllowed: 200
+
+stages:
+- clean
+- build
+- scan
+
+clean-job:
+  stage: clean
+  script:
+  - gradle clean
+
+build-job:
+  stage: build
+  script:
+  - gradle build
+
+scan-job:
+  stage: scan
+  script:
+  - gradle build
+  - nohup /root/AppScanPresence/startPresence.sh &
+  - >
+    asocToken=$(curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
+    dastFileId=$(curl -X 'POST' 'https://cloud.appscan.com/api/v2/FileUpload' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: multipart/form-data' -F 'fileToUpload=@dast.config;type=application/xml' | grep -oP '(?<="FileId":")[^"]*')
+    data=$(date '+%m-%d-%Y')
+    scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":false,"ExploreItems":[],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","IncludeVerifiedDomains":false,"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fastest","LoginSequenceFileId":"'"$dastFileId"'","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":null,"MaxRequestsTimeFrame":null,"ScanName":"'"DAST $date $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Execute":true,"Personal":false,"ClientType":"user-site","Comment":null,"FullyAutomatic":false,"RecurrenceRule":null,"RecurrenceStartDate":null}' | jq -r '. | {Id} | join(" ")')
+  - >  
+    for x in $(seq 1 1000)
+      do
+        scanStatus=$(curl -s -X 'GET' "https://cloud.appscan.com/api/v2/Scans/$scanId" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" | jq -r '.LatestExecution | {Status} | join(" ")')
+        echo $scanStatus 
+        if [ "$scanStatus" == "Ready" ]
+          then break
+        elif [ "$scanStatus" == "Failed" ] 
+          then
+            echo "Scan Failed. Check ASOC logs"
+            exit 1
+        fi
+        sleep 60
+      done
+  - >  
+    reportId=$(curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header "Authorization: Bearer $asocToken" -d '{"Configuration":{"Summary":true,"Details":true,"Discussion":true,"Overview":true,"TableOfContent":true,"Articles":true,"History":true,"Coverage":true,"MinimizeDetails":true,"ReportFileType":"HTML","Title":"","Notes":"","Locale":"en"},"OdataFilter":"","ApplyPolicies":"None"}' "https://cloud.appscan.com/api/v2/Reports/Security/Scan/$scanId" | grep -oP '(?<="Id":")[^"]*')
+  - >
+    for x in {1..30}
+      do
+        curl -s -X GET --header 'Accept: text/xml' --header "Authorization: Bearer $asocToken" "https://cloud.appscan.com/api/v2/Reports/Download/$reportId" > DAST_report.html
+        if [[ -s DAST_report.html ]] 
+      then
+          break
+      fi
+      sleep 1
+    done  
+  - >
+    curl -X 'GET' "https://cloud.appscan.com/api/v2/Scans/$scanId" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" > scanResult.txt
+  - highIssues=$(cat scanResult.txt | jq -r '.LastSuccessfulExecution | {NHighIssues} | join(" ")')
+  - mediumIssues=$(cat scanResult.txt | jq -r '.LastSuccessfulExecution | {NMediumIssues} | join(" ")')
+  - lowIssues=$(cat scanResult.txt | jq -r '.LastSuccessfulExecution | {NLowIssues} | join(" ")')
+  - totalIssues=$(cat scanResult.txt | jq -r '.LastSuccessfulExecution | {NIssuesFound} | join(" ")')
+  - >
+    if [ "$highIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "highIssues" ]
+      then
+        echo "Security Gate build failed"
+        exit 1
+    elif [ "$mediumIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "mediumIssues" ]
+      then
+        echo "Security Gate build failed"
+        exit 1
+    elif [ "$lowIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "lowIssues" ]
+      then
+        echo "Security Gate build failed"
+        exit 1
+    elif [ "$totalIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "totalIssues" ]
+      then
+        echo "Security Gate build failed"
+        exit 1
+    fi
+  - echo "Security Gate passed"
+
   artifacts:
     paths:
       - "*.html"
