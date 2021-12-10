@@ -64,11 +64,15 @@ scan-job:
   stage: scan-sast
   script:
   - gradle build
+  # Generate IRX files based on source root folder downloaded by Gitlab
   - appscan.sh prepare
+  # Authenticate in ASOC
   - appscan.sh api_login -P $apiKeyId -u $apiKeySecret -persist
+  # Upload IRX file to ASOC to be analyzed and receive scanId
   - appscan.sh queue_analysis -a $appId >> output.txt
   - cat output.txt
   - scanId=$(sed -n '2p' output.txt)
+  # Check by Status Ready 
   - >
     for x in $(seq 1 1000)
       do
@@ -79,7 +83,9 @@ scan-job:
         fi
         sleep 60
       done
+  # Get report from ASOC
   - appscan.sh get_result -i $scanId -t html
+  # Get summary scan and give it to Security Gateway decision
   - appscan.sh info -i $scanId > scanStatus.txt
   - highIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NHighIssues":)[^,]*')
   - mediumIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NMediumIssues":)[^,]*')
@@ -136,11 +142,15 @@ stages:
 scan-job:
   stage: scan-dast
   script:
+  # 1 - Authenticate to ASOC and get Token. 
+  # 2 - If available on root source code, get dast.config file, upload do ASOC and get dastFileId. 
+  # 3 - Request a DAST Scan to ASOC. There is some report config that could be passed on json config or it could be a variable. 
   - >
     asocToken=$(curl -s -X POST --header "Content-Type: application/json" --header "Accept: application/json" -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
     dastFileId=$(curl -X 'POST' 'https://cloud.appscan.com/api/v2/FileUpload' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: multipart/form-data' -F 'fileToUpload=@dast.config;type=application/xml' | grep -oP '(?<="FileId":")[^"]*')
     data=$(date '+%m-%d-%Y')
     scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" -H 'Content-Type: application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":false,"ExploreItems":[],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","IncludeVerifiedDomains":false,"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fastest","LoginSequenceFileId":"'"$dastFileId"'","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":null,"MaxRequestsTimeFrame":null,"ScanName":"'"DAST $date $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Execute":true,"Personal":false,"ClientType":"user-site","Comment":null,"FullyAutomatic":false,"RecurrenceRule":null,"RecurrenceStartDate":null}' | jq -r '. | {Id} | join(" ")')
+# Check DAST Scan Status. When Ready exit loop.
   - >  
     for x in $(seq 1 1000)
       do
@@ -155,8 +165,10 @@ scan-job:
         fi
         sleep 60
       done
+# Request for Report in HTML. There is some report config that could be passed on json config.   
   - >  
     reportId=$(curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header "Authorization: Bearer $asocToken" -d '{"Configuration":{"Summary":true,"Details":true,"Discussion":true,"Overview":true,"TableOfContent":true,"Articles":true,"History":true,"Coverage":true,"MinimizeDetails":true,"ReportFileType":"HTML","Title":"","Notes":"","Locale":"en"},"OdataFilter":"","ApplyPolicies":"None"}' "https://cloud.appscan.com/api/v2/Reports/Security/Scan/$scanId" | grep -oP '(?<="Id":")[^"]*')
+# Loop to get report file.
   - >
     for x in {1..30}
       do
@@ -166,7 +178,8 @@ scan-job:
           break
       fi
       sleep 1
-    done  
+    done
+# Get summary scan and give it to Security Gateway decision    
   - >
     curl -X 'GET' "https://cloud.appscan.com/api/v2/Scans/$scanId" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" > scanResult.txt
   - highIssues=$(cat scanResult.txt | jq -r '.LastSuccessfulExecution | {NHighIssues} | join(" ")')
