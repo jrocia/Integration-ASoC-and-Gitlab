@@ -18,10 +18,7 @@ Based in 3 components:<br>
 2 - YAML project file with a scan job to be used in a YAML project file<br>
 3 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
-Features:
-- Downloadable artifact scan report
-- Parameterizable Security Gate
-
+Dockerfile to generate a docker image with SAClient:</br> 
 docker build -t saclient dockerfile
 ````dockerfile
 FROM ubuntu:20.04
@@ -32,6 +29,7 @@ RUN curl https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux 
 RUN unzip SAClientUtil.zip
 ````
 
+Gitlab YAML file to run SAST analyzes:
 ````yaml
 image: saclient
 
@@ -121,6 +119,7 @@ Based in 2 components:<br>
 1 - YAML project file with a scan job to be used in a YAML project file.<br>
 2 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
+Gitlab YAML file to run DAST analyzes:
 ````yaml
 # The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues.
 # maxIssuesAllowed is the amount of issues in selected sevSecGw.
