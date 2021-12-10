@@ -1,16 +1,6 @@
 # Integration AppScan on Cloud (ASoC) and Gitlab
 Yaml file and Dockerfile giving ideas in how to integrate ASoC and Gitlab
 
-<b><h1>SAST:</b></h1><br>
-Based in 3 components:<br>
-1 - a Dockerfile to generate a image container where download ASOC command line client and some tools to be used by Gitlab image Pipeline<br>
-2 - YAML project file with a scan job to be used in a YAML project file<br>
-3 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
-
-Features:
-- Downloadable artifact scan report
-- Parameterizable Security Gate
-
 Scan Job
 ![image](https://user-images.githubusercontent.com/69405400/144601178-9bc8c675-a2dd-44c4-a312-908800be1472.png)
 
@@ -21,6 +11,16 @@ Security Gate response failing or succeeding build
 ![image](https://user-images.githubusercontent.com/69405400/144601954-ae41e5ea-a9fa-464b-b931-36cd0887723b.png)
 ![image](https://user-images.githubusercontent.com/69405400/144602140-3e4320f3-a86c-44a1-93ed-5ad7f5fa3348.png)
 
+
+<b><h1>SAST:</b></h1><br>
+Based in 3 components:<br>
+1 - a Dockerfile to generate a image container where download ASOC command line client and some tools to be used by Gitlab image Pipeline<br>
+2 - YAML project file with a scan job to be used in a YAML project file<br>
+3 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
+
+Features:
+- Downloadable artifact scan report
+- Parameterizable Security Gate
 
 docker build -t saclient dockerfile
 ````dockerfile
