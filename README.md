@@ -19,9 +19,9 @@ Based in 3 components:<br>
 3 - some variable that could be on YAML project file or be add directly on Gitlab Project (Settings > CI/CD and expand the Variables)<br>
 
 Dockerfile to generate a docker image with SAClient:</br> 
-docker build -t saclient dockerfile
+docker build -t saclient .
 ````dockerfile
-FROM ubuntu:20.04
+FROM ubuntu:latest
 ENV PATH="/SAClientUtil.8.0.1473/bin:${PATH}"
 RUN apt update
 RUN apt install -y curl unzip maven openjdk-11-jre gradle && apt clean
