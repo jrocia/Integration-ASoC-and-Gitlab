@@ -65,7 +65,7 @@ scan-job:
   # Generate IRX files based on source root folder downloaded by Gitlab
   - appscan.sh prepare
   # Authenticate in ASOC
-  - appscan.sh api_login -P $apiKeyId -u $apiKeySecret -persist
+  - appscan.sh api_login -u $apiKeyId -P $apiKeySecret -persist
   # Upload IRX file to ASOC to be analyzed and receive scanId
   - appscan.sh queue_analysis -a $appId >> output.txt
   - cat output.txt
