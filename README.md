@@ -22,11 +22,13 @@ Dockerfile to generate a docker image with SAClient:</br>
 docker build -t saclient .
 ````dockerfile
 FROM ubuntu:latest
-ENV PATH="/SAClientUtil.8.0.1473/bin:${PATH}"
+ENV PATH="/SAClientUtil/bin:${PATH}"
 RUN apt update
 RUN apt install -y curl unzip maven openjdk-11-jre gradle && apt clean
 RUN curl https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux > SAClientUtil.zip
 RUN unzip SAClientUtil.zip
+RUN rm -f SAClientUtil.zip
+RUN SAClientUtil.* SAClientUtil
 ````
 
 Gitlab YAML file to run SAST analyzes:
