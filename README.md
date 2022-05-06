@@ -94,24 +94,35 @@ scan-job:
   - >
     if [ "$highIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "highIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$mediumIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "mediumIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$lowIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "lowIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$totalIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "totalIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     fi
+  - echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+  - echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
   - echo "Security Gate passed"
   
   artifacts:
+    when: always
     paths:
       - "*.html"
 ````
@@ -190,24 +201,35 @@ scan-job:
   - >
     if [ "$highIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "highIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$mediumIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "mediumIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$lowIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "lowIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$totalIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "totalIssues" ]
       then
+        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     fi
+  - echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
+  - echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
   - echo "Security Gate passed"
 
   artifacts:
+    when: always
     paths:
       - "*.html"
 ````
