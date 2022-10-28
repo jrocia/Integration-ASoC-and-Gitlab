@@ -72,17 +72,17 @@ scan-job:
   - appscan.sh queue_analysis -a $appId >> output.txt
   - cat output.txt
   - scanId=$(sed -n '2p' output.txt)
-  # Check by Status Ready 
+  # Check Scan Status
+  - resultScan=$(appscan.sh status -i $scanId)
   - >
-    for x in $(seq 1 1000)
-      do
-        resultScan=$(appscan.sh status -i $scanId)
-        echo $resultScan 
-        if [ "$resultScan" == "Ready" ]
-          then break 
-        fi
-        sleep 60
-      done
+    while true ; do 
+      resultScan=$(appscan.sh status -i $scanId)
+      echo $resultScan
+      if [ "$resultScan" != "Running" ]
+        then break
+      fi
+      sleep 60
+    done
   # Get report from ASOC
   - appscan.sh get_result -i $scanId -t html
   # Get summary scan and give it to Security Gateway decision
@@ -91,33 +91,29 @@ scan-job:
   - mediumIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NMediumIssues":)[^,]*')
   - lowIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NLowIssues":)[^,]*')
   - totalIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NIssuesFound":)[^,]*')
+  - echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues."
   - >
     if [ "$highIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "highIssues" ]
       then
-        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
         echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$mediumIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "mediumIssues" ]
       then
-        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
         echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$lowIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "lowIssues" ]
       then
-        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
         echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     elif [ "$totalIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "totalIssues" ]
       then
-        echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
         echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
         echo "Security Gate build failed"
         exit 1
     fi
-  - echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues"
   - echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
   - echo "Security Gate passed"
   
