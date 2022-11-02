@@ -69,7 +69,8 @@ scan-job:
   # Authenticate in ASOC
   - appscan.sh api_login -u $apiKeyId -P $apiKeySecret -persist
   # Upload IRX file to ASOC to be analyzed and receive scanId
-  - appscan.sh queue_analysis -a $appId >> output.txt
+  - scanName=$CI_PROJECT_NAME-$CI_JOB_ID
+  - appscan.sh queue_analysis -a $appId -n $scanName > output.txt
   - cat output.txt
   - scanId=$(sed -n '2p' output.txt)
   # Check Scan Status
