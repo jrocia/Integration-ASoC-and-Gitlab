@@ -13,4 +13,4 @@ jobs:
           asoc_key: ${{secrets.ASOC_KEY}}
           asoc_secret: ${{secrets.ASOC_SECRET}}
           application_id: b40bbfcb-7dc6-4ac2-a89c-15d4b1b5ddae
-          optional_inputs: wait_for_analysis
+          wait_for_analysis: true
