@@ -1,0 +1,75 @@
+# Requirement: Gitlab-runner running in a Windows Server, SAClientUtil deployed and folder bin in Windows System PATH
+
+variables:
+  apiKeyId: xxxxxxxxxxxxx
+  apiKeySecret: xxxxxxxxxxxxx
+  appId: xxxxxxxxxxxxx
+  sevSecGw: totalIssues
+  maxIssuesAllowed: 2000
+
+stages:
+- scan-sast
+
+scan-job:
+  stage: scan-sast
+  tags:
+    - appscan
+  script:
+  # Generate IRX files based on source root folder downloaded by Gitlab
+  - appscan prepare
+  # Authenticate in ASOC
+  - appscan api_login -u $apiKeyId -P $apiKeySecret -persist
+  # Upload IRX file to ASOC to be analyzed and receive scanId
+  - $scanName="$CI_PROJECT_NAME-$CI_JOB_ID";
+  - appscan queue_analysis -a $appId -n $scanName > output.txt
+  - $scanId=$(get-content .\output.txt -tail 1)
+  - write-host "The scan name is $scanName and scanId is $scanId"
+  - $scanStatus=$(appscan status -i $scanId)
+  - $scanStatus
+  - >
+    while ("$scanStatus" -like "*Running*"){
+      $scanStatus = appscan status -i $scanId;
+      write-host $scanStatus
+      sleep 60
+    }
+  - appscan get_result -i $scanId -t html
+  - appscan info -i $scanId > scanStatus.txt
+  - $scanSummary=get-content ./scanStatus.txt
+  - $criticalIssues=$scanSummary | Select-String -Pattern "NCriticalIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
+  - $highIssues=$scanSummary | Select-String -Pattern "NHighIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
+  - $mediumIssues=$scanSummary | Select-String -Pattern "NMediumIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
+  - $lowIssues=$scanSummary | Select-String -Pattern "NLowIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
+  - $totalIssues=$scanSummary | Select-String -Pattern "NIssuesFound`":(.\d+)," | % {$_.Matches.Groups[1].Value}
+
+  - write-host "There is $criticalIssues critical issues, $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues."
+  - write-host "The company policy permit less than $maxIssuesAllowed $sevSecGw severity."
+
+  - >
+    if (( $criticalIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "criticalIssues" )) {
+      write-host "Security Gate build failed";
+      exit 1
+    }
+    elseif (( $highIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "highIssues" )) {
+      write-host "Security Gate build failed";
+      exit 1
+    }
+    elseif (( $mediumIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "mediumIssues" )) {
+      write-host "Security Gate build failed";
+      exit 1
+    }
+    elseif (( $lowIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "lowIssues" )) {
+      write-host "Security Gate build failed";
+      exit 1
+    }
+    elseif (( $totalIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "totalIssues" )) {
+      write-host "Security Gate build failed";
+      exit 1
+    }
+    else{  
+      write-host "Security Gate passed"
+    }
+  
+  artifacts:
+    when: always
+    paths:
+      - "*.html"
