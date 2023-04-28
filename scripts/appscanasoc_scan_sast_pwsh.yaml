@@ -65,10 +65,8 @@ scan-job:
       write-host "Security Gate build failed";
       exit 1
     }
-    else{  
-      write-host "Security Gate passed"
-      exit 0
-    }
+  - write-host "Security Gate passed"
+  - exit 0
   
   artifacts:
     when: always
