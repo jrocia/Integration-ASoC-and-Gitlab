@@ -77,7 +77,7 @@ scan-job:
     fi
   - echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
   - echo "Security Gate passed"
-  
+  - exit 0
   artifacts:
     when: always
     paths:
