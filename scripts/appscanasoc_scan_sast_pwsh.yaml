@@ -49,24 +49,23 @@ scan-job:
       write-host "Security Gate build failed";
       exit 1
     }
-    elseif (( $highIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "highIssues" )) {
+    if (( $highIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "highIssues" )) {
       write-host "Security Gate build failed";
       exit 1
     }
-    elseif (( $mediumIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "mediumIssues" )) {
+    if (( $mediumIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "mediumIssues" )) {
       write-host "Security Gate build failed";
       exit 1
     }
-    elseif (( $lowIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "lowIssues" )) {
+    if (( $lowIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "lowIssues" )) {
       write-host "Security Gate build failed";
       exit 1
     }
-    elseif (( $totalIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "totalIssues" )) {
+    if (( $totalIssues -gt $maxIssuesAllowed ) -and ( "$sevSecGw" -eq "totalIssues" )) {
       write-host "Security Gate build failed";
       exit 1
     }
   - write-host "Security Gate passed"
-  - exit 0
   
   artifacts:
     when: always
