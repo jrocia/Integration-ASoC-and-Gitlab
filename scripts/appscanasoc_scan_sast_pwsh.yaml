@@ -67,6 +67,7 @@ scan-job:
     }
     else{  
       write-host "Security Gate passed"
+      exit 0
     }
   
   artifacts:
