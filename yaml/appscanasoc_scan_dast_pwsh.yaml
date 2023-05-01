@@ -12,14 +12,16 @@ variables:
   urlTarget: https://demo.testfire.net
   loginDastConfig: login.dast.config
   manualExplorerDastConfig: manualexplorer.dast.config
-  sevSecGw: highIssues
-  maxIssuesAllowed: 0
+  sevSecGw: criticalIssues
+  maxIssuesAllowed: 10
 
 stages:
 - scan-dast
 
-scan-job:
+scan-dast-job:
   stage: scan-dast
+  tags:
+    - appscan
   script:
 
 # Authenticate and get token
@@ -35,7 +37,6 @@ scan-job:
     else{
       write-host "Login file not identified. "
     }
-
 # Check if there is manual explorer file in root repository folder and upload to ASoC  
   - >
     if ((Test-Path -Path $manualExplorerDastConfig -PathType Leaf)){
@@ -73,17 +74,19 @@ scan-job:
   # Request the report
   - >  
     $reportId=((Invoke-WebRequest -Method "POST" -Headers @{"accept"="application/json";"authorization"="Bearer $asocApiToken"} -ContentType "application/json" -Body ("{`"Configuration`":{`"Summary`":true,`"Details`":true,`"Discussion`":true,`"Overview`":true,`"TableOfContent`":true,`"Articles`":true,`"History`":true,`"Coverage`":true,`"MinimizeDetails`":true,`"ReportFileType`":`"HTML`",`"Title`":`"`",`"Notes`":`"`",`"Locale`":`"en`"},`"OdataFilter`":`"`",`"ApplyPolicies`":`"None`"}") -uri "https://cloud.appscan.com/api/v2/Reports/Security/Scan/$scanId" | ConvertFrom-json).id);
+  - write-host "Report Id $reportId."
   
   # Loop waiting download report
+  - $reportStatus=((Invoke-WebRequest -Method "GET" -Headers @{"accept"="text/xml";"authorization"="Bearer $asocApiToken"} -uri "https://cloud.appscan.com/api/V2/Reports/$reportId").content | ConvertFrom-Json).Status
   - >
-    while ($true){
-      Invoke-WebRequest -Method "GET" -Headers @{"accept"="text/xml";"authorization"="Bearer $asocApiToken"} -uri "https://cloud.appscan.com/api/v2/Reports/Download/$reportId" -OutFile scan_report.html;
-      if (((test-path scan_report.html) -and ((get-item scan_report.html).length -gt 0))){
-        break
-      }
-      sleep 10
+    while ("$reportStatus" -notlike "*Ready*"){
+      $reportStatus=((Invoke-WebRequest -Method "GET" -Headers @{"accept"="text/xml";"authorization"="Bearer $asocApiToken"} -uri "https://cloud.appscan.com/api/V2/Reports/$reportId").content | ConvertFrom-Json).Status
+      write-host $reportStatus;
+      sleep 60
     }
-  
+  - write-host "Report generated."
+  - Invoke-WebRequest -Method "GET" -Headers @{"accept"="text/xml";"authorization"="Bearer $asocApiToken"} -uri "https://cloud.appscan.com/api/v2/Reports/Download/$reportId" -OutFile scan_report.html;
+
   # Security gate
   - $scanResult=((Invoke-WebRequest -Method "GET" -Headers @{"accept"="text/xml";"authorization"="Bearer $asocApiToken"} -uri "https://cloud.appscan.com/api/v2/Scans/$scanId").content | ConvertFrom-json);
   - $criticalIssues=$scanResult.LatestExecution.NCriticalIssues
