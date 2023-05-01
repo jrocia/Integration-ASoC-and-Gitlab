@@ -4,6 +4,9 @@
 # appId is application id located in ASoC.
 # appscanPresenceId is AppScan Presence ID that will be used to reach out URL. Keep 00000000-0000-0000-0000-000000000000 if there is no AppScanPresence.
 # If there is login.dast.config and manualexplorer.dast.config in repository it will be uploaded and used in Scan otherwise will be ignored.
+
+image: debian:latest
+
 variables:
   apiKeyId: xxxxxxxxxxxxxxxx
   apiKeySecret: xxxxxxxxxxxxxxxx
@@ -21,6 +24,8 @@ stages:
 scan-job:
   stage: scan-dast
   script:
+  # installing requeriments
+  - 'apt update && apt install curl jq git -y'  
   # Authenticate and get token
   - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
   # Check if there is login file in root repository folder and upload to ASoC
