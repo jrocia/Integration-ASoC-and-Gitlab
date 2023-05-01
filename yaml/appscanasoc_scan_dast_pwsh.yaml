@@ -4,7 +4,7 @@
 # appscanPresenceId is AppScan Presence ID that will be used to reach out URL. Keep 00000000-0000-0000-0000-000000000000 if there is no AppScanPresence.
 # If there is login.dast.config and manualexplorer.dast.config in repository it will be uploaded and used in Scan otherwise will be ignored.
 variables:
-  appName=$CI_PROJECT_NAME
+  appName: $CI_PROJECT_NAME
   apiKeyId: xxxxxxxxxxxxxxxx
   apiKeySecret: xxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxx
