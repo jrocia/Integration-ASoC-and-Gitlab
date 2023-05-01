@@ -66,6 +66,7 @@ scan-sast-job:
       exit 1
     }
   - write-host "Security Gate passed"
+  - exit 0
   
   artifacts:
     when: always
