@@ -10,7 +10,7 @@ variables:
 stages:
 - scan-sast
 
-scan-job:
+scan-sast-job:
   stage: scan-sast
   tags:
     - appscan
