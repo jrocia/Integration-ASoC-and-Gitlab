@@ -40,7 +40,8 @@ scan-sast-job:
   - $mediumIssues=$scanSummary | Select-String -Pattern "NMediumIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
   - $lowIssues=$scanSummary | Select-String -Pattern "NLowIssues`":(.\d+)," | % {$_.Matches.Groups[1].Value}
   - $totalIssues=$scanSummary | Select-String -Pattern "NIssuesFound`":(.\d+)," | % {$_.Matches.Groups[1].Value}
-
+  - $maxIssuesAllowed = $maxIssuesAllowed -as [int]
+  
   - write-host "There is $criticalIssues critical issues, $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues."
   - write-host "The company policy permit less than $maxIssuesAllowed $sevSecGw severity."
 
