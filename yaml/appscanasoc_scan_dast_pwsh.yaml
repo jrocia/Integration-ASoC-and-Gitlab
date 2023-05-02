@@ -95,6 +95,7 @@ scan-dast-job:
   - $lowIssues=$scanResult.LatestExecution.NLowIssues
   - $infoIssues=$scanResult.LatestExecution.NInfoIssues
   - $totalIssues=$scanResult.LatestExecution.NIssuesFound
+  - $maxIssuesAllowed = $maxIssuesAllowed -as [int]
   
   - write-host "There is $criticalIssues critical issues, $highIssues high issues, $mediumIssues medium issues, $lowIssues low issues and $infoIssues info issues."
   - write-host "The company policy permit less than $maxIssuesAllowed $sevSecGw severity."
