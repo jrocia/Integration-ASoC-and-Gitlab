@@ -39,8 +39,8 @@ image: saclient
 # maxIssuesAllowed is the amount of issues in selected sevSecGw
 # appId is application id located in ASoC 
 variables:
-  apiKeyId: xxxxxxxxxxxxxxxxxx
-  apiKeySecret: xxxxxxxxxxxxxxxxxx
+  asocApiKeyId: xxxxxxxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxxxx
   sevSecGw: totalIssues
   maxIssuesAllowed: 200
@@ -67,7 +67,7 @@ scan-job:
   # Generate IRX files based on source root folder downloaded by Gitlab
   - appscan.sh prepare
   # Authenticate in ASOC
-  - appscan.sh api_login -u $apiKeyId -P $apiKeySecret -persist
+  - appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
   # Upload IRX file to ASOC to be analyzed and receive scanId
   - scanName=$CI_PROJECT_NAME-$CI_JOB_ID
   - appscan.sh queue_analysis -a $appId -n $scanName > output.txt
@@ -137,8 +137,8 @@ Gitlab YAML file to run DAST analyzes:
 # appscanPresenceId is AppScan Presence ID that will be used to reach out URL. Keep 00000000-0000-0000-0000-000000000000 if there is no AppScanPresence.
 # If there is login.dast.config and manualexplorer.dast.config in repository it will be uploaded and used in Scan otherwise will be ignored.
 variables:
-  apiKeyId: xxxxxxxxxxxxxxxx
-  apiKeySecret: xxxxxxxxxxxxxxxx
+  asocApiKeyId: xxxxxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxx
   appscanPresenceId: 00000000-0000-0000-0000-000000000000
   urlTarget: https://demo.testfire.net
@@ -154,7 +154,7 @@ scan-job:
   stage: scan-dast
   script:
   # Authenticate and get token
-  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
+  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${asocApiKeyId}"'","KeySecret":"'"${asocApiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
   # Check if there is login file in root repository folder and upload to ASoC
   - >
     if [ -f "$loginDastConfig" ]; then 
