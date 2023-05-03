@@ -4,8 +4,8 @@ image: debian:latest
 # maxIssuesAllowed is the amount of issues in selected sevSecGw
 # appId is application id located in ASoC 
 variables:
-  apiKeyId: xxxxxxxxxxxxxxxxxxx
-  apiKeySecret: xxxxxxxxxxxxxxxxxxx
+  asocApiKeyId: xxxxxxxxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxxxxx
   sevSecGw: totalIssues
   maxIssuesAllowed: 200
@@ -27,7 +27,7 @@ scan-job:
   # Generate IRX files based on source root folder downloaded by Gitlab
   - appscan.sh prepare
   # Authenticate in ASOC
-  - appscan.sh api_login -u $apiKeyId -P $apiKeySecret -persist
+  - appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
   # Upload IRX file to ASOC to be analyzed and receive scanId
   - scanName=$CI_PROJECT_NAME-$CI_JOB_ID
   - appscan.sh queue_analysis -a $appId -n $scanName > output.txt
