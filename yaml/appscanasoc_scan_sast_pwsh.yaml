@@ -1,8 +1,8 @@
 # Requirement: Gitlab-runner running in a Windows Server, SAClientUtil deployed and folder bin in Windows System PATH
 
 variables:
-  apiKeyId: xxxxxxxxxxxxx
-  apiKeySecret: xxxxxxxxxxxxx
+  asocApiKeyId: xxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxx
   appId: xxxxxxxxxxxxx
   sevSecGw: totalIssues
   maxIssuesAllowed: 2000
@@ -18,7 +18,7 @@ scan-sast-job:
   # Generate IRX files based on source root folder downloaded by Gitlab
   - appscan prepare
   # Authenticate in ASOC
-  - appscan api_login -u $apiKeyId -P $apiKeySecret -persist
+  - appscan api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
   # Upload IRX file to ASOC to be analyzed and receive scanId
   - $scanName="$CI_PROJECT_NAME-$CI_JOB_ID";
   - appscan queue_analysis -a $appId -n $scanName > output.txt
