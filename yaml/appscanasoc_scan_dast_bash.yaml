@@ -8,8 +8,8 @@
 image: debian:latest
 
 variables:
-  apiKeyId: xxxxxxxxxxxxxxxx
-  apiKeySecret: xxxxxxxxxxxxxxxx
+  asocApiKeyId: xxxxxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxx
   appscanPresenceId: 00000000-0000-0000-0000-000000000000
   urlTarget: https://demo.testfire.net
@@ -27,7 +27,7 @@ scan-job:
   # installing requeriments
   - 'apt update && apt install curl jq git -y'  
   # Authenticate and get token
-  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${apiKeyId}"'","KeySecret":"'"${apiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
+  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${asocApiKeyId}"'","KeySecret":"'"${asocApiKeySecret}"'"}' 'https://cloud.appscan.com/api/V2/Account/ApiKeyLogin' | grep -oP '(?<="Token":")[^"]*')
   # Check if there is login file in root repository folder and upload to ASoC
   - >
     if [ -f "$loginDastConfig" ]; then 
