@@ -2,7 +2,7 @@
 # The options to sevSecGw are highIssues, mediumIssues, lowIssues and totalIssues.
 # maxIssuesAllowed is the amount of issues in selected sevSecGw.
 # appId is application id located in ASoC.
-# appscanPresenceId is AppScan Presence ID that will be used to reach out URL. Keep 00000000-0000-0000-0000-000000000000 if there is no AppScanPresence.
+# appscanPresenceId is AppScan Presence ID that will be used to reach out URL. Keep the variable commented if there is no AppScanPresence.
 # If there is login.dast.config and manualexplorer.dast.config in repository it will be uploaded and used in Scan otherwise will be ignored.
 
 image: debian:latest
@@ -11,7 +11,7 @@ variables:
   asocApiKeyId: xxxxxxxxxxxxxxxx
   asocApiKeySecret: xxxxxxxxxxxxxxxx
   appId: xxxxxxxxxxxxxxxx
-  appscanPresenceId: 00000000-0000-0000-0000-000000000000
+  #appscanPresenceId: 00000000-0000-0000-0000-000000000000
   urlTarget: https://demo.testfire.net
   loginDastConfig: login.dast.config
   manualExplorerDastConfig: manualexplorer.dast.config
@@ -48,10 +48,10 @@ scan-job:
   # Start scan. If there is manual explorer file, start the scan  in test only mode otherwise full scan
   - >
     if [ -f $manualExplorerDastConfig ]; then
-      scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":true,"ExploreItems":[{"FileId":"'"$manualExplorerDastConfigId"'"}],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","IncludeVerifiedDomains":false,"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fastest","LoginSequenceFileId":"'"$loginDastConfigId"'","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":null,"MaxRequestsTimeFrame":null,"ScanName":"'"DAST $scanName $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Execute":true,"Personal":false,"ClientType":"user-site","Comment":null,"FullyAutomatic":false,"RecurrenceRule":null,"RecurrenceStartDate":null}' | jq -r '. | {Id} | join(" ")');
+      scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":true,"ExploreItems":[{"FileId":"'"$manualExplorerDastConfigId"'"}],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AllowedDomains":[],"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fast","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000,"ScanName":"'"DAST $scanName $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Personal":false,"ClientType":"user-site","EnablementMessage":"","FullyAutomatic":false,"OtpSecretKey":null,"OtpLength":null,"OtpHashType":"SHA1","OtpTimeStep":null,"OtpHttpParameters":null,"Execute":true,"RecurrenceRule":null,"RecurrenceStartDate":null,"RecurrenceEndDate":null}' | jq -r '. | {Id} | join(" ")');
       echo "Scan started with Manual Explorer and Test Only mode, scanId $scanId";
     else
-      scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":false,"ExploreItems":[],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","IncludeVerifiedDomains":false,"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fastest","LoginSequenceFileId":"'"$loginDastConfigId"'","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":null,"MaxRequestsTimeFrame":null,"ScanName":"'"DAST $scanName $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Execute":true,"Personal":false,"ClientType":"user-site","Comment":null,"FullyAutomatic":false,"RecurrenceRule":null,"RecurrenceStartDate":null}' | jq -r '. | {Id} | join(" ")');
+      scanId=$(curl -s -X 'POST' 'https://cloud.appscan.com/api/v2/Scans/DynamicAnalyzerWithFiles' -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"StartingUrl":"'"$urlTarget"'","TestOnly":false,"ExploreItems":[],"LoginUser":"","LoginPassword":"","TestPolicy":"Default.policy","ExtraField":"","ScanType":"Staging","PresenceId":"'"$appscanPresenceId"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AllowedDomains":[],"HttpAuthUserName":"","HttpAuthPassword":"","HttpAuthDomain":"","TestOptimizationLevel":"Fast","ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000,"ScanName":"'"DAST $scanName $urlTarget"'","EnableMailNotification":false,"Locale":"en","AppId":"'"$appId"'","Personal":false,"ClientType":"user-site","EnablementMessage":"","FullyAutomatic":false,"OtpSecretKey":null,"OtpLength":null,"OtpHashType":"SHA1","OtpTimeStep":null,"OtpHttpParameters":null,"Execute":true,"RecurrenceRule":null,"RecurrenceStartDate":null,"RecurrenceEndDate":null}' | jq -r '. | {Id} | join(" ")');
       echo "Scan started, scanId $scanId";
     fi
   # Check status scan and keep it in loop until Ready status.
