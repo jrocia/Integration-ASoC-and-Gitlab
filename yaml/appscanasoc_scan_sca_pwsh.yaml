@@ -1,0 +1,25 @@
+variables:
+  asocApiKeyId: xxxxxxxxxxxxxxxxxxx
+  asocApiKeySecret: xxxxxxxxxxxxxxxxxxx
+  asocAppName: $CI_PROJECT_NAME
+  asocAssetGroupId: xxxxxxxxxxxxxxxxxxx
+
+stages:
+- scan-sca
+
+scan-sca:
+  stage: scan-sca
+  tags:
+    - appscan
+  script:
+
+  - Invoke-WebRequest -Uri https://raw.githubusercontent.com/jrocia/Integration-AppScan-onprem-and-Gitlab/main/scripts/appscanasoc_create_application_asoc.ps1 -OutFile appscanasoc_create_application_asoc.ps1
+  - .\appscanasoc_create_application_asoc.ps1
+
+  - Invoke-WebRequest -Uri https://raw.githubusercontent.com/jrocia/Integration-AppScan-onprem-and-Gitlab/main/scripts/appscanasoc_scan_sca.ps1 -OutFile appscanasoc_scan_sca.ps1
+  - .\appscanasoc_scan_sca.ps1
+
+  artifacts:
+    when: always
+    paths:
+      - "*.pdf"
