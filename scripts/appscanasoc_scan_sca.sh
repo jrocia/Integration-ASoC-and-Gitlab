@@ -1,6 +1,7 @@
 appId=$(cat appId.txt)
 export PATH="$HOME/SAClientUtil/bin:${PATH}"
 
+apt install docker.io
 appscan.sh prepare_sca -image $image
 
 # Authenticate in ASOC
