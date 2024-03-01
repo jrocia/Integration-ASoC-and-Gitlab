@@ -1,6 +1,6 @@
 appId=$(cat appId.txt)
 
-appscan.sh prepare_sca IMAGEM
+appscan.sh prepare_sca $image
 
 # Authenticate in ASOC
 appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
