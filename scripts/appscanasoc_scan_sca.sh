@@ -1,7 +1,8 @@
 appId=$(cat appId.txt)
 export PATH="$HOME/SAClientUtil/bin:${PATH}"
 
-apt install docker.io
+#apt install docker.io
+curl https://get.docker.com/builds/Linux/x86_64/docker-latest.tgz | tar xvz -C /tmp/ && mv /tmp/docker/docker /usr/bin/docker
 appscan.sh prepare_sca -image $image
 
 # Authenticate in ASOC
