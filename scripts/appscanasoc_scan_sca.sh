@@ -1,3 +1,4 @@
+apt install apt-utils
 curl -fsSL https://get.docker.com | sh
 
 appId=$(cat appId.txt)
