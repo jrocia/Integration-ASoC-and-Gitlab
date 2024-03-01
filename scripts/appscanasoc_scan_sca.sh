@@ -1,5 +1,5 @@
-#apt install apt-utils
-#curl -fsSL https://get.docker.com | sh
+apt install apt-utils
+curl -fsSL https://get.docker.com | sh
 
 appId=$(cat appId.txt)
 export PATH="$HOME/SAClientUtil/bin:${PATH}"
