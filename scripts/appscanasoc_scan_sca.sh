@@ -1,7 +1,7 @@
 appId=$(cat appId.txt)
-echo $appId
 export PATH="$HOME/SAClientUtil/bin:${PATH}"
-appscan.sh prepare_sca $image
+
+appscan.sh prepare_sca -image $image
 
 # Authenticate in ASOC
 appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
