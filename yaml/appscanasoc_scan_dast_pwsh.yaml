@@ -24,7 +24,7 @@ scan-dast-job:
   script:
 
 # Authenticate and get token
-  - $asocApiToken=($(Invoke-WebRequest -Method "POST" -Headers @{"accept"="application/json"} -ContentType "application/json" -Body ("{`"KeyId`":`"$asocApiKeyId`", `"KeySecret`":`"$asocApiKeySecret`"}") -Uri "https://cloud.appscan.com/api/V2/Account/ApiKeyLogin").content | ConvertFrom-Json).token
+  - $asocApiToken=($(Invoke-WebRequest -Method "POST" -Headers @{"accept"="application/json"} -ContentType "application/json" -Body ("{`"KeyId`":`"$asocApiKeyId`", `"KeySecret`":`"$asocApiKeySecret`"}") -Uri "https://cloud.appscan.com/api/v4/Account/ApiKeyLogin").content | ConvertFrom-Json).token
 
 # Check if there is login file in root repository folder and upload to ASoC
   - >
