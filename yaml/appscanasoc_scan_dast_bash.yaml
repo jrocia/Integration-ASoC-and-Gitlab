@@ -27,7 +27,7 @@ scan-job:
   # installing requeriments
   - 'apt update && apt install curl jq git -y'  
   # Authenticate and get token
-  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${asocApiKeyId}"'","KeySecret":"'"${asocApiKeySecret}"'"}' 'https://cloud.appscan.com/api/v4/Account/ApiKeyLogin' | grep -oP '(?<="Token": ")[^"]*')
+  - asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"${asocApiKeyId}"'","KeySecret":"'"${asocApiKeySecret}"'"}' 'https://cloud.appscan.com/api/v4/Account/ApiKeyLogin' | grep -oP '(?<="Token":\ ")[^"]*')
   # Check if there is login file in root repository folder and upload to ASoC
   - >
     if [ -f "$loginDastConfig" ]; then 
