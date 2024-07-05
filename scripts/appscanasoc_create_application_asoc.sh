@@ -6,7 +6,7 @@
 
 asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
 if [ -z "$asocToken" ]; then
-	echo "The token variable is empty";
+	echo "The token variable is empty. Check the authentication process.";
     exit 1
 fi
 
