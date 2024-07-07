@@ -1,0 +1,22 @@
+variables:
+  asocApiKeyId: 'xxxxxxxxxxxxxxxx'
+  asocApiKeySecret: 'xxxxxxxxxxxxxxxx'
+  asocAppName: $CI_PROJECT_NAME
+  serviceUrl: 'cloud.appscan.com'
+  assetGroupId: 'xxxxxxxxxxxxxxxx'
+  scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  urlTarget: 'https://demo.testfire.net?mode=demo'
+  loginDastConfig: 'login.dast.config'
+  manualExplorerDastConfig: 'manualexplorer.dast.config'
+  appscanPresenceId: ''
+  sevSecGw: 'criticalIssues'
+  maxIssuesAllowed: 100
+
+include:
+  - remote: 'https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/yaml/appscanasoc_scan_dast.yaml'
+
+stages:
+- scan-dast
+
+scan-job:
+  stage: scan-dast
