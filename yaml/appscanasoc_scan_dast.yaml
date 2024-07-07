@@ -1,0 +1,50 @@
+image: debian:latest
+
+variables:
+  asocApiKeyId: 'xxxxxxxxxxxxx'
+  asocApiKeySecret: 'xxxxxxxxxxxxx'
+  asocAppName: $CI_PROJECT_NAME
+  serviceUrl: 'cloud.appscan.com'
+  assetGroupId: 'xxxxxxxxxxxxx'
+  scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  urlTarget: 'xxxxxxxxxxxxx'
+  loginDastConfig: 'login.dast.config'
+  manualExplorerDastConfig: 'manualexplorer.dast.config'
+  appscanPresenceId: ''
+  sevSecGw: 'criticalIssues'
+  maxIssuesAllowed: 1000
+
+stages:
+- scan-dast
+
+scan-job:
+  stage: scan-dast
+  script:
+    - apt update > /dev/null && apt install curl jq git -y > /dev/null
+
+    - echo "The scans service url is $serviceUrl. The ASoC application name is $asocAppName and it is part of asset group id number $assetGroupId. The url target is $urlTarget. The scan name will be $CI_PROJECT_NAME-$CI_JOB_ID."
+
+    - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_create_application_asoc.sh
+    - chmod +x appscanasoc_create_application_asoc.sh
+    - ./appscanasoc_create_application_asoc.sh
+
+    - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_dast_scan.sh
+    - chmod +x appscanasoc_dast_scan.sh
+    - ./appscanasoc_dast_scan.sh
+
+    - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_html_report.sh
+    - chmod +x appscanasoc_get_html_report.sh
+    - ./appscanasoc_get_html_report.sh
+
+    - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_xml_report.sh
+    - chmod +x appscanasoc_get_xml_report.sh
+    - ./appscanasoc_get_xml_report.sh
+
+    - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_check_security_gate.sh
+    - chmod +x appscanasoc_check_security_gate.sh
+    - ./appscanasoc_check_security_gate.sh
+
+  artifacts:
+    when: always
+    paths:
+      - "*.html"
