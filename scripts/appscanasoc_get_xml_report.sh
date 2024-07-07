@@ -20,7 +20,7 @@ echo "Report requested. The report id is $reportId."
 while true ; do
     reportStatus=$(curl -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" | grep -oP '(?<="Message":\ ")[^"]*')
     if [ "$reportStatus" == "Report is not available" ]; then
-        echo "Report generating."
+        echo "Report being generated."
         sleep 10
     else
         echo "Report ready."
