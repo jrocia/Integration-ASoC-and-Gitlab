@@ -1,6 +1,6 @@
-asocApiKeyId='xxxxxxxxxxxx'
-asocApiKeySecret='xxxxxxxxxxxx'
-serviceUrl='cloud.appscan.com'
+#asocApiKeyId='xxxxxxxxxxxx'
+#asocApiKeySecret='xxxxxxxxxxxx'
+#serviceUrl='cloud.appscan.com'
 
 scanId=$(cat scanId.txt)
 
