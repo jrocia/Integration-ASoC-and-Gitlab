@@ -8,6 +8,7 @@
 #scanName=$CI_PROJECT_NAME-$CI_JOB_ID
 
 appId=$(cat appId.txt)
+echo "Dast" > scanTech.txt
 
 asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
 
