@@ -4,6 +4,7 @@
 #scanName=$CI_PROJECT_NAME-$CI_JOB_ID
 
 appId=$(cat appId.txt)
+echo "Sast" > scanTech.txt
 
 # Downloading and preparing SAClientUtil
 curl https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux > $HOME/SAClientUtil.zip
