@@ -34,8 +34,6 @@ else
 fi
 
 # Start scan. If there is manual explorer file, start the scan  in test only mode otherwise full scan
-curl -k -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanConfiguration":{"Target":{"StartingUrl":"'"$urlTarget"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AdditionalDomains":[]},"Tests":{"TestPolicy":"Default.policy","TestOptimizationLevel":"Fast","TestLoginPages":false,"TestLoginPagesWithoutSessionIds":false,"TestLogoutPages":false},"Communication":{"ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000},"ApplicationElements":{"EnableAutomaticFormFill":true}},"TestOnly":false,"ExploreItems":[],"LoginSequenceFileId":"'"$loginDastConfigId"'","ScanName":"'"DAST $scanName $urlTarget"'","Locale":"en","AppId":"'"$appId"'","ClientType":"user-site","FullyAutomatic":false,"Execute":true,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}'
-
 if [[ -n $appscanPresenceId ]]; then
     echo "Scanning a private url."
     if [ -f $manualExplorerDastConfig ] && [ -f $loginDastConfig ]; then
