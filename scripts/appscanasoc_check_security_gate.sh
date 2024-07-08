@@ -6,7 +6,7 @@
 
 scanId=$(cat scanId.txt)
 
-asocToken=$(curl -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
+asocToken=$(curl -k -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
 
 if [ -z "$asocToken" ]; then
 	echo "The token variable is empty. Check the authentication process.";
@@ -15,9 +15,9 @@ fi
 
 scanTech=$(cat scanTech.txt)
 if [[ $scanTech == 'Sast' ]]; then
-    curl -s -X GET "https://cloud.appscan.com/api/v4/Scans/Sast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
+    curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Sast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
 elif [[ $scanTech == 'Dast' ]]; then
-    curl -s -X GET "https://cloud.appscan.com/api/v4/Scans/Dast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
+    curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Dast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
 else
     echo "Scan technology not identified."
     exit 1
