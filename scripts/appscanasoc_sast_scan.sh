@@ -7,7 +7,7 @@ appId=$(cat appId.txt)
 
 # Downloading and preparing SAClientUtil
 curl https://cloud.appscan.com/api/SCX/StaticAnalyzer/SAClientUtil?os=linux > $HOME/SAClientUtil.zip
-unzip $HOME/SAClientUtil.zip -d $HOME
+unzip $HOME/SAClientUtil.zip -d $HOME > /dev/null
 rm -f $HOME/SAClientUtil.zip
 mv $HOME/SAClientUtil.* $HOME/SAClientUtil
 export PATH="$HOME/SAClientUtil/bin:${PATH}"
