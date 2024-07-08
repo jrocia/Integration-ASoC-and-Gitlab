@@ -22,7 +22,7 @@ scan-job:
   script:
     - apt update > /dev/null && apt install curl jq git -y > /dev/null
 
-    - echo -e "\e[42mSCAN VARIABLE SUMMARY:\ The scans service url is $serviceUrl. The AppScan application name is $asocAppName and it is part of asset group id number $assetGroupId. The url target is $urlTarget. The scan name will be $CI_PROJECT_NAME-$CI_JOB_ID. The AppScan Presence id is $appscanPresenceId <-(in case it is empty the application must be public). The Security Gate permit less than $maxIssuesAllowed $sevSecGw severity.\e[0m"
+    - echo -e "\e[42mSCAN VARIABLE SUMMARY - The scans service url is $serviceUrl. The AppScan application name is $asocAppName and it is part of asset group id number $assetGroupId. The url target is $urlTarget. The scan name will be $CI_PROJECT_NAME-$CI_JOB_ID. The AppScan Presence id is $appscanPresenceId <-(in case it is empty the application must be public). The Security Gate permit less than $maxIssuesAllowed $sevSecGw severity.\e[0m"
 
     - curl -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_create_application_asoc.sh
     - chmod +x appscanasoc_create_application_asoc.sh
