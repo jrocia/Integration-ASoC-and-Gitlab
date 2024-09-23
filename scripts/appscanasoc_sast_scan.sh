@@ -17,6 +17,7 @@ if ! [ -x "$(command -v appscan.sh)" ]; then
 fi
 
 # Generate IRX files based on source root folder downloaded by Gitlab
+appscan.sh version
 appscan.sh prepare
 
 # Authenticate in ASOC
