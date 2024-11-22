@@ -27,6 +27,14 @@ while true ; do
     fi
 done
 
-curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > DAST_report.html
+scanTech=$(cat scanTech.txt)
+if [[ $scanTech == 'Sast' ]]; then
+    curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > SAST_report.html
+elif [[ $scanTech == 'Dast' ]]; then
+    curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > DAST_report.html
+else
+    echo "Scan technology not identified. XML Report not generated."
+    exit 1
+fi
 
 curl -k -s -X 'GET' "https://$serviceUrl/api/v4/Account/Logout" -H 'accept: */*' -H "Authorization: Bearer $asocToken"
