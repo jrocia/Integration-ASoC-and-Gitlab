@@ -28,3 +28,5 @@ while true ; do
 done
 
 curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > DAST_report.html
+
+curl -X 'GET' "https://$serviceUrl/api/v4/Account/Logout" -H 'accept: */*' -H "Authorization: Bearer $asocToken"
