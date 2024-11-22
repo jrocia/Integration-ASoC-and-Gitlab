@@ -53,3 +53,5 @@ elif [[ "$totalIssues" -gt "$maxIssuesAllowed" ]] && [[ "$sevSecGw" == "totalIss
 fi
 echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
 echo "Security Gate passed"
+
+curl -X 'GET' "https://$serviceUrl/api/v4/Account/Logout" -H 'accept: */*' -H "Authorization: Bearer $asocToken"
