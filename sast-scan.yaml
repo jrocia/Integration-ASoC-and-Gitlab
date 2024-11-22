@@ -5,6 +5,7 @@ variables:
   serviceUrl: 'cloud.appscan.com'
   assetGroupId: 'xxxxxxxxxxxxxx'
   scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  scanLatestCommitFiles: 'no' # yes or no. Scan only the latest committed files. Partial scan.
   sevSecGw: 'criticalIssues'
   maxIssuesAllowed: 100
 
