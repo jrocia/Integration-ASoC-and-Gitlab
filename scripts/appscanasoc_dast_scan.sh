@@ -86,3 +86,5 @@ while true ; do
     fi
     sleep 60
 done
+
+curl -X 'GET' "https://$serviceUrl/api/v4/Account/Logout" -H 'accept: */*' -H "Authorization: Bearer $asocToken"
