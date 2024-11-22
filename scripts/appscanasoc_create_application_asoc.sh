@@ -5,9 +5,14 @@
 #assetGroupId='xxxxxxxxxxxxxxx'
 
 asocToken=$(curl -k -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
-
 if [ -z "$asocToken" ]; then
-	echo "The token variable is empty. Check the authentication process.";
+	echo "The token variable is empty. Check the API keys.";
+    exit 1
+fi
+
+assetGroupIdExist=$(curl -k -s -X 'GET' 'https://cloud.appscan.com/api/v4/AssetGroups' -H 'accept: application/json' -H "Authorization: Bearer $asocToken" | grep "$assetGroupId")
+if [ -z "$assetGroupIdExist" ]; then
+        echo "Asset Group ID does not exist. Check the Asset Group ID.";
     exit 1
 fi
 
@@ -17,6 +22,11 @@ if [ -z "$appId" ]; then
 	echo "There is no $asocAppName application. It was created. The appId is $appId";
 else 
 	echo "Application name $asocAppName exist. The appId is $appId."
+fi
+
+if [ -z "$appId" ]; then
+        echo "Something went wrong while checking if the application ID exists. Check the variables.";
+    exit 1
 fi
 
 echo $appId > appId.txt
