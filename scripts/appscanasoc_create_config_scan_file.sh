@@ -1,4 +1,5 @@
 #!/bin/bash
+# scanLatestCommitFiles: 'no'
 
 if [[ -z "$scanLatestCommitFiles" || ( "$scanLatestCommitFiles" != "yes" && "$scanLatestCommitFiles" != "no" ) ]]; then
   echo "The variable scanLatestCommitFiles must be 'yes' or 'no', and it cannot be empty."
