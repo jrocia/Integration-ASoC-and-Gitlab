@@ -57,7 +57,8 @@ stages:
 - scan-sast
 
 scan-job:
-  stage: scan-sast````
+  stage: scan-sast
+````
 
 <b><h1>DAST:</b></h1><br>
 Based in 2 components:<br>
