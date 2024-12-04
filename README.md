@@ -39,90 +39,24 @@ image: saclient
 # maxIssuesAllowed is the amount of issues in selected sevSecGw
 # appId is application id located in ASoC 
 variables:
-  asocApiKeyId: xxxxxxxxxxxxxxxxxx
-  asocApiKeySecret: xxxxxxxxxxxxxxxxxx
-  appId: xxxxxxxxxxxxxxxxxx
-  sevSecGw: totalIssues
-  maxIssuesAllowed: 200
+  asocApiKeyId: 'xxxxxxxxxxxxxx'
+  asocApiKeySecret: 'xxxxxxxxxxxxxx'
+  asocAppName: $CI_PROJECT_NAME
+  serviceUrl: 'cloud.appscan.com'
+  assetGroupId: 'xxxxxxxxxxxxxx'
+  scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  scanLatestCommitFiles: 'no' # yes or no. Scan only the latest committed files. Partial scan.
+  sevSecGw: 'criticalIssues'
+  maxIssuesAllowed: 100
+
+include:
+  - remote: 'https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/yaml/appscanasoc_scan_sast.yaml'
 
 stages:
-- clean
-- build
 - scan-sast
 
-clean-job:
-  stage: clean
-  script:
-  - gradle clean
-
-build-job:
-  stage: build
-  script:
-  - gradle build
-
 scan-job:
-  stage: scan-sast
-  script:
-  - gradle build
-  # Generate IRX files based on source root folder downloaded by Gitlab
-  - appscan.sh prepare
-  # Authenticate in ASOC
-  - appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
-  # Upload IRX file to ASOC to be analyzed and receive scanId
-  - scanName=$CI_PROJECT_NAME-$CI_JOB_ID
-  - appscan.sh queue_analysis -a $appId -n $scanName > output.txt
-  - scanId=$(sed -n '2p' output.txt)
-  - echo "The scan name is $scanName and scanId is $scanId"
-  # Check Scan Status
-  - resultScan=$(appscan.sh status -i $scanId)
-  - >
-    while true ; do 
-      resultScan=$(appscan.sh status -i $scanId)
-      echo $resultScan
-      if [ "$resultScan" != "Running" ]
-        then break
-      fi
-      sleep 60
-    done
-  # Get report from ASOC
-  - appscan.sh get_result -i $scanId -t html
-  # Get summary scan and give it to Security Gateway decision
-  - appscan.sh info -i $scanId > scanStatus.txt
-  - highIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NHighIssues":)[^,]*')
-  - mediumIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NMediumIssues":)[^,]*')
-  - lowIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NLowIssues":)[^,]*')
-  - totalIssues=$(cat scanStatus.txt | grep LatestExecution | grep -oP '(?<="NIssuesFound":)[^,]*')
-  - echo "There is $highIssues high issues, $mediumIssues medium issues and $lowIssues low issues."
-  - >
-    if [ "$highIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "highIssues" ]
-      then
-        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
-        echo "Security Gate build failed"
-        exit 1
-    elif [ "$mediumIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "mediumIssues" ]
-      then
-        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
-        echo "Security Gate build failed"
-        exit 1
-    elif [ "$lowIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "lowIssues" ]
-      then
-        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
-        echo "Security Gate build failed"
-        exit 1
-    elif [ "$totalIssues" -gt "$maxIssuesAllowed" ] && [ "$sevSecGw" == "totalIssues" ]
-      then
-        echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
-        echo "Security Gate build failed"
-        exit 1
-    fi
-  - echo "The company policy permit less than $maxIssuesAllowed $sevSecGw severity"
-  - echo "Security Gate passed"
-  
-  artifacts:
-    when: always
-    paths:
-      - "*.html"
-````
+  stage: scan-sast````
 
 <b><h1>DAST:</b></h1><br>
 Based in 2 components:<br>
