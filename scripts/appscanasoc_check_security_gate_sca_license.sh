@@ -5,7 +5,6 @@
 #serviceUrl='xxxxxxxxxxxxx'
 #sevSecGw='xxxxxxxxxxxxx'
 #maxIssuesAllowed=xxxxxxxxxxxxx
-#scanId='133290fd-692a-47a9-9131-887543e9c348'
 
 scanId=$(cat scanId.txt)
 
