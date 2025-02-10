@@ -41,4 +41,4 @@ resultScan=$(appscan.sh status -i $scanId)
 
 # Get report from ASOC
 appscan.sh get_report -i $scanId -s scan -t security
-appscan.sh get_report -i $scanId -s scan -t licenses
+appscan.sh get_report -i $scanId -s scan -t license
