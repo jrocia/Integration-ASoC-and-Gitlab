@@ -36,6 +36,10 @@ scan-job:
     - chmod +x appscanasoc_check_security_gate_sca_license.sh
     - ./appscanasoc_check_security_gate_sca_license.sh
 
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_check_security_gate.sh
+    - chmod +x appscanasoc_check_security_gate.sh
+    - ./appscanasoc_check_security_gate.sh
+
   artifacts:
     when: always
     paths:
