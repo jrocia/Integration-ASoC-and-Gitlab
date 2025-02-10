@@ -1,1 +1,46 @@
+image: debian:latest
 
+variables:
+  asocApiKeyId: 'xxxxxxxxxxxxx'
+  asocApiKeySecret: 'xxxxxxxxxxxxx'
+  asocAppName: $CI_PROJECT_NAME
+  serviceUrl: 'cloud.appscan.com'
+  assetGroupId: 'xxxxxxxxxxxxx'
+  scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  sevSecGw: 'criticalIssues'
+  maxIssuesAllowed: 100
+
+stages:
+- scan-sca
+
+scan-job:
+  stage: scan-sca
+  script:
+    - apt update > /dev/null && apt install curl jq git unzip -y > /dev/null
+
+    - echo -e "\e[42mSCAN VARIABLE SUMMARY - The scans service url is $serviceUrl. The AppScan application name is $asocAppName and it is part of asset group id number $assetGroupId. The scan name will be $CI_PROJECT_NAME-$CI_JOB_ID. The Security Gate permit less than $maxIssuesAllowed $sevSecGw severity.\e[0m"
+
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_create_application_asoc.sh
+    - chmod +x appscanasoc_create_application_asoc.sh
+    - ./appscanasoc_create_application_asoc.sh
+
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_sca_scan.sh
+    - chmod +x appscanasoc_sca_scan.sh
+    - ./appscanasoc_sca_scan.sh
+
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_html_report.sh
+    - chmod +x appscanasoc_get_html_report.sh
+    - ./appscanasoc_get_html_report.sh
+
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_xml_report.sh
+    - chmod +x appscanasoc_get_xml_report.sh
+    - ./appscanasoc_get_xml_report.sh
+
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_check_security_gate.sh
+    - chmod +x appscanasoc_check_security_gate.sh
+    - ./appscanasoc_check_security_gate.sh
+
+  artifacts:
+    when: always
+    paths:
+      - "*.html"
