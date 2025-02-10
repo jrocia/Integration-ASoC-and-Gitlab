@@ -4,7 +4,7 @@
 #scanName=$CI_PROJECT_NAME-$CI_JOB_ID
 
 appId=$(cat appId.txt)
-echo "Sast" > scanTech.txt
+echo "Sca" > scanTech.txt
 
 # Downloading and preparing SAClientUtil
 if ! [ -x "$(command -v appscan.sh)" ]; then
