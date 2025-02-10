@@ -28,17 +28,13 @@ scan-job:
     - chmod +x appscanasoc_sca_scan.sh
     - ./appscanasoc_sca_scan.sh
 
-    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_html_report.sh
-    - chmod +x appscanasoc_get_html_report.sh
-    - ./appscanasoc_get_html_report.sh
-
     - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_get_xml_report.sh
     - chmod +x appscanasoc_get_xml_report.sh
     - ./appscanasoc_get_xml_report.sh
 
-    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_check_security_gate.sh
-    - chmod +x appscanasoc_check_security_gate.sh
-    - ./appscanasoc_check_security_gate.sh
+    - curl -k -s -O https://raw.githubusercontent.com/jrocia/Integration-ASoC-and-Gitlab/main/scripts/appscanasoc_check_security_gate_sca_license.sh
+    - chmod +x appscanasoc_check_security_gate_sca_license.sh
+    - ./appscanasoc_check_security_gate_sca_license.sh
 
   artifacts:
     when: always
