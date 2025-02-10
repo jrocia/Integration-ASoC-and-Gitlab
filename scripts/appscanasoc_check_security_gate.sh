@@ -18,6 +18,8 @@ if [[ $scanTech == 'Sast' ]]; then
     curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Sast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
 elif [[ $scanTech == 'Dast' ]]; then
     curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Dast/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
+elif [[ $scanTech == 'Sca' ]]; then
+    curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Sca/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanResult.txt
 else
     echo "Scan technology not identified."
     exit 1
