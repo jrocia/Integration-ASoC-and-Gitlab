@@ -41,3 +41,4 @@ scan-job:
     paths:
       - "*.html"
       - "*.pdf"
+      - "*.xml"
