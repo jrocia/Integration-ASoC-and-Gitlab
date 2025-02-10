@@ -40,3 +40,4 @@ scan-job:
     when: always
     paths:
       - "*.html"
+      - "*.pdf"
