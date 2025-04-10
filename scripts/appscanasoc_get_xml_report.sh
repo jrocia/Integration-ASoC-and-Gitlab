@@ -30,11 +30,11 @@ done
 
 scanTech=$(cat scanTech.txt)
 if [[ $scanTech == 'Sast' ]]; then
-    curl -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > SAST_report.xml
+    curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > SAST_report.xml
 elif [[ $scanTech == 'Dast' ]]; then
-    curl -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > DAST_report.xml
+    curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > DAST_report.xml
 elif [[ $scanTech == 'Sca' ]]; then
-    curl -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > SCA_report.xml
+    curl -k -s -X GET --header 'Accept:text/xml' --header "Authorization:Bearer $asocToken" "https://$serviceUrl/api/v4/Reports/$reportId/Download" > SCA_report.xml
 else
     echo "Scan technology not identified. XML Report not generated."
     exit 1
