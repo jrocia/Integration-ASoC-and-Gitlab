@@ -34,6 +34,8 @@ if [ -f "$irxFile" ]; then
     echo "$irxFile exist. It will be uploaded to ASoC. IRX file id is $irxFileId.";
     
     echo "--------------"
+    echo "irxFile $irxFile"
+    echo "curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$irxFile""
     curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$irxFile"
     echo "--------------"
     
