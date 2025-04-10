@@ -27,12 +27,6 @@ if [ -z "$asocToken" ]; then
     exit 1
 fi
 
-echo "---------"
-ls -t *.irx
-echo "---------"
-ls -t *.irx | head -n1
-echo "---------"
-
 irxFile=$(ls -t *.irx | head -n1)
 # Upload IRX file
 if [ -f "$irxFile" ]; then
@@ -41,6 +35,10 @@ if [ -f "$irxFile" ]; then
 else
     echo "IRX file not identified.";
 fi
+
+echo "---------------"
+curl -s -k -X 'POST' "https://$serviceUrl/api/v4/Scans/Sast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d '{"AppId":"'"$appId"'","ApplicationFileId":"'"$irxFileId"'","ClientType":"user-site","EnableMailNotification":false,"Execute":true,"Locale":"en","Personal":false,"ScanName":"'"SAST $scanName $irxFile"'","EnablementMessage":"","FullyAutomatic":true}'
+echo "---------------"
 
 # Start scan. If scan only latest commited files equal yes, personal scan will be selected.
 if [ "$scanLatestCommitFiles" = 'yes' ]; then
