@@ -27,6 +27,12 @@ if [ -z "$asocToken" ]; then
     exit 1
 fi
 
+echo "---------"
+ls -t *.irx
+echo "---------"
+ls -t *.irx | head -n1
+echo "---------"
+
 irxFile=$(ls -t *.irx | head -n1)
 # Upload IRX file
 if [ -f "$irxFile" ]; then
