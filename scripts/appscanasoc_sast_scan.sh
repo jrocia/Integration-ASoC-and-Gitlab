@@ -32,20 +32,14 @@ irxFile=$(ls -t *.irx | head -n1)
 if [ -f "$irxFile" ]; then
     irxFileId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$irxFile" | grep -oP '(?<="FileId":\ ")[^"]*');
     echo "$irxFile exist. It will be uploaded to ASoC. IRX file id is $irxFileId.";
+    
     echo "--------------"
     curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$irxFile"
     echo "--------------"
+    
 else
     echo "IRX file not identified.";
 fi
-
-echo "---------------"
-
-echo "AppId:$appId,ApplicationFileId:$irxFileId,ClientType:user-site,EnableMailNotification:false,Execute:true,Locale:en,Personal:false,ScanName:SAST $scanName $irxFile,EnablementMessage:,FullyAutomatic:true"
-
-echo "curl -s -k -X 'POST' "https://$serviceUrl/api/v4/Scans/Sast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d '{"AppId":"'"$appId"'","ApplicationFileId":"'"$irxFileId"'","ClientType":"user-site","EnableMailNotification":false,"Execute":true,"Locale":"en","Personal":false,"ScanName":"'"SAST $scanName $irxFile"'","EnablementMessage":"","FullyAutomatic":true}'"
-curl -s -k -X 'POST' "https://$serviceUrl/api/v4/Scans/Sast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d '{"AppId":"'"$appId"'","ApplicationFileId":"'"$irxFileId"'","ClientType":"user-site","EnableMailNotification":false,"Execute":true,"Locale":"en","Personal":false,"ScanName":"'"SAST $scanName $irxFile"'","EnablementMessage":"","FullyAutomatic":true}'
-echo "---------------"
 
 # Start scan. If scan only latest commited files equal yes, personal scan will be selected.
 if [ "$scanLatestCommitFiles" = 'yes' ]; then
