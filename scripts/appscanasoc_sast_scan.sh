@@ -28,8 +28,12 @@ if [ -z "$asocToken" ]; then
 fi
 
 irxFile=$(ls -t *.irx | head -n1)
+
+mv $irxFile file.irx
+irxFile='file.irx'
+
 # Upload IRX file
-if [ -f "$irxFile" ]; then
+if [ -f "$irxFile" ]; then    
     irxFileId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$irxFile" | grep -oP '(?<="FileId":\ ")[^"]*');
     echo "$irxFile exist. It will be uploaded to ASoC. IRX file id is $irxFileId.";
     
