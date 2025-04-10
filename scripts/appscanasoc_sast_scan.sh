@@ -17,9 +17,9 @@ if ! [ -x "$(command -v appscan.sh)" ]; then
 fi
 
 # Generate IRX files based on source root folder downloaded by Gitlab
-appscan.sh version
-appscan.sh prepare
-appscan.sh update
+appscan.sh version -acceptssl 
+appscan.sh prepare -acceptssl
+appscan.sh update -acceptssl
 
 # Authenticate in ASOC
 asocToken=$(curl -k -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
