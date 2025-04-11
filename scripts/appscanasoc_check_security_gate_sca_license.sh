@@ -15,9 +15,9 @@ if [ -z "$asocToken" ]; then
     exit 1
 fi
 
-scanExec=$(curl -k -s -X GET "https://cloud.appscan.com/api/v4/Scans/Sca/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" | jq  -r '.LatestExecution.Id')
+scanExec=$(curl -k -s -X GET "https://$serviceUrl/api/v4/Scans/Sca/$scanId" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" | jq  -r '.LatestExecution.Id')
 
-curl -k -s -X GET "https://cloud.appscan.com/api/v4/OSLibraries/GetLicensesForScope/ScanExecution/$scanExec" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanScaResult.txt
+curl -k -s -X GET "https://$serviceUrl/api/v4/OSLibraries/GetLicensesForScope/ScanExecution/$scanExec" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" > scanScaResult.txt
 
 cat scanScaResult.txt |  jq -r '.Items[] | .LibraryName, .RiskLevel'
 
