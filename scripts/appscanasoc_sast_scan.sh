@@ -16,10 +16,17 @@ if ! [ -x "$(command -v appscan.sh)" ]; then
   export PATH="$HOME/SAClientUtil/bin:${PATH}"
 fi
 
-# Generate IRX files based on source root folder downloaded by Gitlab
 appscan.sh version
 appscan.sh update -acceptssl
-appscan.sh prepare -acceptssl
+
+# Generate IRX files based on source root folder downloaded by Gitlab
+if [ "$scanLatestCommitFiles" = 'yes' ]; then
+  echo "AppScan Prepare using SCO parameter.";
+  appscan.sh prepare -sco -acceptssl
+else
+  echo "AppScan Prepare.";
+  appscan.sh prepare -acceptssl
+fi
 
 # Authenticate in ASOC
 asocToken=$(curl -k -s -X POST --header 'Content-Type:application/json' --header 'Accept:application/json' -d '{"KeyId":"'"$asocApiKeyId"'","KeySecret":"'"$asocApiKeySecret"'"}' "https://$serviceUrl/api/v4/Account/ApiKeyLogin" | grep -oP '(?<="Token":\ ")[^"]*')
