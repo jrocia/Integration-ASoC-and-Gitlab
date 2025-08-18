@@ -25,7 +25,7 @@ if [ "$scoScan" = 'yes' ]; then
   appscan.sh prepare -sco -acceptssl
 else
   echo "AppScan Prepare.";
-  appscan.sh prepare -acceptssl
+  appscan.sh prepare -sco -acceptssl
 fi
 
 # Authenticate in ASOC
