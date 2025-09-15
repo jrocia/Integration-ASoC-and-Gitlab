@@ -17,6 +17,7 @@ if ! [ -x "$(command -v appscan.sh)" ]; then
 fi
 
 appscan.sh prepare_sca -nc
+echo "Using NC"
 
 # Authenticate in ASOC
 appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
