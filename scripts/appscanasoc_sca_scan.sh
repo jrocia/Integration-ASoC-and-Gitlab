@@ -16,8 +16,10 @@ if ! [ -x "$(command -v appscan.sh)" ]; then
   export PATH="$HOME/SAClientUtil/bin:${PATH}"
 fi
 
-appscan.sh prepare_sca -nc
-echo "Using NC"
+appscan.sh prepare_sca
+
+#appscan.sh prepare_sca -nc
+#echo "Using NC"
 
 # Authenticate in ASOC
 appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
