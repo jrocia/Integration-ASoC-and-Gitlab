@@ -5,6 +5,7 @@ variables:
   serviceUrl: 'cloud.appscan.com'
   assetGroupId: 'xxxxxxxxxxxxxx'
   scanName: $CI_PROJECT_NAME-$CI_JOB_ID
+  considerPkgManager: 'yes' #to ignore pkg manager files change to 'no'
   sevSecGw: 'criticalIssues'
   maxIssuesAllowed: 100
 
