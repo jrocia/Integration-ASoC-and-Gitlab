@@ -7,7 +7,7 @@ variables:
   serviceUrl: 'cloud.appscan.com'
   assetGroupId: 'xxxxxxxxxxxxx'
   scanName: $CI_PROJECT_NAME-$CI_JOB_ID
-  scanLatestCommittedFiles: 'no'
+  scanLatestCommitFiles: 'no'
   sevSecGw: 'criticalIssues'
   maxIssuesAllowed: 100
 
