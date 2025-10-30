@@ -28,7 +28,7 @@ fi
 appscan.sh api_login -u $asocApiKeyId -P $asocApiKeySecret -persist
 
 # Upload IRX file to ASOC to be analyzed and receive scanId
-scanName=$CI_PROJECT_NAME-$CI_JOB_ID
+#scanName=$CI_PROJECT_NAME-$CI_JOB_ID
 appscan.sh queue_analysis -a $appId -n $scanName > output.txt
 scanId=$(sed -n '3p' output.txt)
 echo "$scanId" > scanId.txt
