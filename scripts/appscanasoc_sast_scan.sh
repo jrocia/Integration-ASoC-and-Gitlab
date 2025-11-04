@@ -21,10 +21,10 @@ appscan.sh update -acceptssl
 
 # Generate IRX files based on source root folder downloaded by Gitlab
 if [ "$scoScan" = 'yes' ]; then
-  echo "AppScan Prepare using SCO parameter.";
+  echo "AppScan Prepare using SCO parameter. Command: appscan.sh prepare -es -sco -nc -acceptssl";
   appscan.sh prepare -es -sco -nc -acceptssl
 else
-  echo "AppScan Prepare.";
+  echo "AppScan Prepare. Command: appscan.sh prepare -es -nc -acceptssl";
   appscan.sh prepare -es -nc -acceptssl
 fi
 
