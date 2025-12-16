@@ -14,6 +14,7 @@ if [ "$scanLatestCommitFiles" = 'yes' ]; then
   readarray -t diffFiles <<< "$diffFilesList"
   for i in ${diffFiles[@]}; do sed -i "s|\(</Target>\)|<Include>$i</Include>\1|" appscan-config.xml; done
   cat appscan-config.xml
+  mv .git .git.bak
 else
   echo "All files in the repository will be scanned."
 fi
