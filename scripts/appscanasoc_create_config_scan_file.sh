@@ -13,6 +13,7 @@ if [ "$scanLatestCommitFiles" = 'yes' ]; then
   diffFilesList=$(git diff --name-only HEAD HEAD~1)
   readarray -t diffFiles <<< "$diffFilesList"
   for i in ${diffFiles[@]}; do sed -i "s|\(</Target>\)|<Include>$i</Include>\1|" appscan-config.xml; done
+  cat appscan-config.xml
 else
   echo "All files in the repository will be scanned."
 fi
