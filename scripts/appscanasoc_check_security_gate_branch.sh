@@ -25,6 +25,12 @@ else
     exit 1
 fi
 
+criticalIssues=0
+highIssues=0
+mediumIssues=0
+lowIssues=0
+totalIssues=0
+
 criticalIssues=$(cat scanResult.txt | jq -r '.LatestExecution | {NCriticalIssues} | join(" ")')
 highIssues=$(cat scanResult.txt | jq -r '.LatestExecution | {NHighIssues} | join(" ")')
 mediumIssues=$(cat scanResult.txt | jq -r '.LatestExecution | {NMediumIssues} | join(" ")')
