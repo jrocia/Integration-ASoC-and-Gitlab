@@ -3,6 +3,7 @@
 #serviceUrl='cloud.appscan.com'
 #urlTarget='xxxxxxxxxxx'
 #loginDastConfig='login.dast.config'
+#scanFile='file.scan'
 #manualExplorerDastConfig='manualexplorer.dast.config'
 #appscanPresenceId='xxxxxxxxxxx'
 #scanName=$CI_PROJECT_NAME-$CI_JOB_ID
