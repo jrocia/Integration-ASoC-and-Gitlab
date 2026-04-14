@@ -33,6 +33,14 @@ else
     echo "Manual Explorer file not identified.";
 fi
 
+  # Check if there is scan file in root repository folder and upload to ASoC  
+if [ -f "$scanFile" ]; then
+    scanFileId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/FileUpload" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:multipart/form-data' -F "uploadedFile=@$scanFile" | grep -oP '(?<="FileId":\ ")[^"]*');
+    echo "$scanFile file exist. So it will be uploaded to ASoC and will be used. Scan file id is $scanFileId.";
+else
+    echo "Scan file not identified.";
+fi
+
 # Start scan. If there is manual explorer file, start the scan  in test only mode otherwise full scan
 if [[ -n $appscanPresenceId ]]; then
     echo "Scanning a private url."
@@ -45,6 +53,9 @@ if [[ -n $appscanPresenceId ]]; then
     elif [ -f $loginDastConfig ]; then
         scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanConfiguration":{"Target":{"StartingUrl":"'"$urlTarget"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AdditionalDomains":[]},"Tests":{"TestPolicy":"Default.policy","TestOptimizationLevel":"Fast","TestLoginPages":false,"TestLoginPagesWithoutSessionIds":false,"TestLogoutPages":false},"Communication":{"ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000},"ApplicationElements":{"EnableAutomaticFormFill":true}},"TestOnly":false,"ExploreItems":[],"LoginSequenceFileId":"'"$loginDastConfigId"'","PresenceId":"'"$appscanPresenceId"'","ScanName":"'"DAST $scanName $urlTarget"'","Locale":"en","AppId":"'"$appId"'","ClientType":"user-site","FullyAutomatic":false,"Execute":true,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}'| jq -r '. | {Id} | join(" ")');
         echo "Scan started with a Login sequence, scanId $scanId";
+    elif [ -f $scanFile ]; then
+        scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanOrTemplateFileId":"'"$scanFileId"'","AppId":"'"$appId"'","TestOperation":"None","PresenceId":"'"$appscanPresenceId"'","ScanName":"'"DAST $scanName $urlTarget"'","Description":"","Execute":true,"Personal":false,"ClientType":"user-site","Locale":"en","EnablementMessage":"","FullyAutomatic":true,"EnableSupportMode":false,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}' | jq -r '. | {Id} | join(" ")');
+        echo "Scan started with Scan File, scanId $scanId";		
     else
         scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanConfiguration":{"Target":{"StartingUrl":"'"$urlTarget"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AdditionalDomains":[]},"Tests":{"TestPolicy":"Default.policy","TestOptimizationLevel":"Fast","TestLoginPages":false,"TestLoginPagesWithoutSessionIds":false,"TestLogoutPages":false},"Communication":{"ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000},"ApplicationElements":{"EnableAutomaticFormFill":true}},"TestOnly":false,"ExploreItems":[],"PresenceId":"'"$appscanPresenceId"'","ScanName":"'"DAST $scanName $urlTarget"'","Locale":"en","AppId":"'"$appId"'","ClientType":"user-site","FullyAutomatic":false,"Execute":true,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}'| jq -r '. | {Id} | join(" ")');
         echo "Scan started, scanId $scanId";
@@ -60,6 +71,9 @@ else
     elif [ -f $loginDastConfig ]; then
         scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanConfiguration":{"Target":{"StartingUrl":"'"$urlTarget"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AdditionalDomains":[]},"Tests":{"TestPolicy":"Default.policy","TestOptimizationLevel":"Fast","TestLoginPages":false,"TestLoginPagesWithoutSessionIds":false,"TestLogoutPages":false},"Communication":{"ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000},"ApplicationElements":{"EnableAutomaticFormFill":true}},"TestOnly":false,"ExploreItems":[],"LoginSequenceFileId":"'"$loginDastConfigId"'","ScanName":"'"DAST $scanName $urlTarget"'","Locale":"en","AppId":"'"$appId"'","ClientType":"user-site","FullyAutomatic":false,"Execute":true,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}'| jq -r '. | {Id} | join(" ")');
         echo "Scan started with a Login sequence, scanId $scanId";
+    elif [ -f $scanFile ]; then
+        scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanOrTemplateFileId":"'"$scanFileId"'","AppId":"'"$appId"'","TestOperation":"None","ScanName":"'"DAST $scanName $urlTarget"'","Description":"","Execute":true,"Personal":false,"ClientType":"user-site","Locale":"en","EnablementMessage":"","FullyAutomatic":true,"EnableSupportMode":false,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}' | jq -r '. | {Id} | join(" ")');
+        echo "Scan started with Scan File, scanId $scanId";	
     else
         scanId=$(curl -k -s -X 'POST' "https://$serviceUrl/api/v4/Scans/Dast" -H 'accept:application/json' -H "Authorization:Bearer $asocToken" -H 'Content-Type:application/json' -d  '{"ScanConfiguration":{"Target":{"StartingUrl":"'"$urlTarget"'","ShouldScanBelowThisDirectory":false,"UseCaseSensitivePaths":false,"AdditionalDomains":[]},"Tests":{"TestPolicy":"Default.policy","TestOptimizationLevel":"Fast","TestLoginPages":false,"TestLoginPagesWithoutSessionIds":false,"TestLogoutPages":false},"Communication":{"ThreadNum":10,"ConnectionTimeout":null,"UseAutomaticTimeout":true,"MaxRequestsIn":10,"MaxRequestsTimeFrame":1000},"ApplicationElements":{"EnableAutomaticFormFill":true}},"TestOnly":false,"ExploreItems":[],"ScanName":"'"DAST $scanName $urlTarget"'","Locale":"en","AppId":"'"$appId"'","ClientType":"user-site","FullyAutomatic":false,"Execute":true,"Recurrence":{"Rule":null,"StartDate":null,"EndDate":null}}'| jq -r '. | {Id} | join(" ")');
         echo "Scan started, scanId $scanId";
