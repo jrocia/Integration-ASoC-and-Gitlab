@@ -8,6 +8,7 @@ variables:
   assetGroupId: 'xxxxxxxxxxxxx'
   scanName: $CI_PROJECT_NAME-$CI_JOB_ID
   urlTarget: 'xxxxxxxxxxxxx'
+  scanFile: 'file.scan'
   loginDastConfig: 'login.dast.config'
   manualExplorerDastConfig: 'manualexplorer.dast.config'
   appscanPresenceId: ''
