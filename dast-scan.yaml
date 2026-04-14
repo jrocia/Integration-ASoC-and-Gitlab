@@ -6,6 +6,7 @@ variables:
   assetGroupId: 'xxxxxxxxxxxxxxxx'
   scanName: $CI_PROJECT_NAME-$CI_JOB_ID
   urlTarget: 'https://demo.testfire.net?mode=demo'
+  scanFile: 'file.scan'
   loginDastConfig: 'login.dast.config'
   manualExplorerDastConfig: 'manualexplorer.dast.config'
   appscanPresenceId: ''
