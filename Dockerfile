@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:20.04  # Replace with an updated version if necessary to comply with security policies
 ENV HOME="/root/"
 ENV PATH="$HOME/SAClientUtil/bin:${PATH}"
 RUN apt update
