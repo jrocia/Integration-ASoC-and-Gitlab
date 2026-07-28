@@ -10,6 +10,7 @@ if [ -z "$asocToken" ]; then
     exit 1
 fi
 
+echo $asocToken
 curl -k -s -X 'GET' "https://$serviceUrl/api/v4/AssetGroups" -H 'accept: application/json' -H "Authorization: Bearer $asocToken"
 
 assetGroupIdExist=$(curl -k -s -X 'GET' "https://$serviceUrl/api/v4/AssetGroups" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" | grep "$assetGroupId")
