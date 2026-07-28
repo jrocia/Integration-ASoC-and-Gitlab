@@ -9,9 +9,9 @@ if [ -z "$asocToken" ]; then
 	echo "The token variable is empty or wrong. Check the API keys.";
     exit 1
 fi
-
+echo $asocToken
 curl -s -k -X GET --header 'Authorization: Bearer '"$asocToken"'' --header 'Accept:application/json' "https://cloud.appscan.com/api/v4/Account/TenantInfo"
-
+exit 1
 assetGroupIdExist=$(curl -k -s -X 'GET' "https://$serviceUrl/api/v4/AssetGroups" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" | grep "$assetGroupId")
 if [ -z "$assetGroupIdExist" ]; then
         echo "Asset Group ID does not exist or wrong. Check the Asset Group ID.";
