@@ -10,6 +10,8 @@ if [ -z "$asocToken" ]; then
     exit 1
 fi
 
+curl -k -s -X 'GET' "https://$serviceUrl/api/v4/AssetGroups" -H 'accept: application/json' -H "Authorization: Bearer $asocToken"
+
 assetGroupIdExist=$(curl -k -s -X 'GET' "https://$serviceUrl/api/v4/AssetGroups" -H 'accept: application/json' -H "Authorization: Bearer $asocToken" | grep "$assetGroupId")
 if [ -z "$assetGroupIdExist" ]; then
         echo "Asset Group ID does not exist or wrong. Check the Asset Group ID.";
